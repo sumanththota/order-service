@@ -34,7 +34,13 @@ public class OrderService {
             orderRepository.save(order);
             log.info("Product created successfully");
 
-            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), orderRequest.userDetails().email());
+            var orderPlacedEvent = new OrderPlacedEvent();
+            orderPlacedEvent.setOrderNumber(order.getOrderNumber());
+            orderPlacedEvent.setEmail(orderRequest.userDetails().email());
+            orderPlacedEvent.setFirstName(orderRequest.userDetails().firstName());
+            orderPlacedEvent.setLastName(orderRequest.userDetails().lastName());
+            log.info("ordernumber={} ;orderemail={} ;orderfirstname={} ;orderlastname={}", order.getOrderNumber(), orderRequest.userDetails().email(), orderRequest.userDetails().firstName(), orderRequest.userDetails().lastName());
+
 
 
             log.info("Start- Sending OrderPlacedEvent {} to Kafka Topic", orderPlacedEvent);
